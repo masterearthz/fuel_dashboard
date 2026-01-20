@@ -36,10 +36,9 @@
 
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
-        const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } = window.Recharts;
+        const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, ComposedChart } = window.Recharts;
 
         // --- Inline Icons (Lucide) ---
-        // ใช้ Inline SVG แทนการ Import เพื่อลดปัญหา CDN Error
         const Icon = ({ children, color = "currentColor", size = 24, ...props }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
                 {children}
@@ -50,22 +49,23 @@
         const Droplets = (props) => <Icon {...props}><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.8-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></Icon>;
         const Wallet = (props) => <Icon {...props}><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></Icon>;
         const Gauge = (props) => <Icon {...props}><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></Icon>;
-        const Calendar = (props) => <Icon {...props}><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></Icon>;
         const Filter = (props) => <Icon {...props}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></Icon>;
         const ChevronDown = (props) => <Icon {...props}><path d="m6 9 6 6 6-6"/></Icon>;
         const ChevronUp = (props) => <Icon {...props}><path d="m18 15-6-6-6 6"/></Icon>;
         const RefreshCw = (props) => <Icon {...props}><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></Icon>;
         const AlertCircle = (props) => <Icon {...props}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></Icon>;
-        const FileText = (props) => <Icon {...props}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></Icon>;
-        const Settings = (props) => <Icon {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></Icon>;
-        const CheckCircle2 = (props) => <Icon {...props}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></Icon>;
         const ListOrdered = (props) => <Icon {...props}><line x1="10" x2="21" y1="6" y2="6"/><line x1="10" x2="21" y1="12" y2="12"/><line x1="10" x2="21" y1="18" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></Icon>;
         const Info = (props) => <Icon {...props}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></Icon>;
+        const TrendingUp = (props) => <Icon {...props}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></Icon>;
+        
+        // Fix: Add missing icon definitions
+        const Settings = (props) => <Icon {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></Icon>;
+        const CheckCircle2 = (props) => <Icon {...props}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></Icon>;
 
         // --- Constants & Config ---
         const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_CbtEgFdOUWga3qSQq2hjdWgFIOTWVsGEK0ZdejWSLGb01td_JC7uITqtWQwLqXswGJcMqCSZpT0j/pub?gid=0&single=true&output=csv";
         
-        // Mock Data for Fallback (Use Thai Headers to match parser logic)
+        // Mock Data for Fallback
         const MOCK_CSV = `วันที่เติม,ทะเบียนรถ,เลขไมล์เติมน้ำม้น,จำนวนลิตร,จำนวนเงินที่เติม,ราคา/ลิตร
 01/01/2567,Toyota Camry (กก-1234),120000,45.5,1600,35.16
 05/01/2567,Honda CR-V (ขข-5678),55000,52.0,1900,36.54
@@ -255,8 +255,6 @@
                 const fetchData = async () => {
                     try {
                         setLoading(true);
-                        
-                        // 1. ลองเชื่อมต่อโดยตรง (Direct Fetch)
                         let response;
                         try {
                             response = await fetch(CSV_URL);
@@ -264,7 +262,6 @@
                             console.warn("Direct fetch failed (likely CORS/307), attempting Proxy...");
                         }
 
-                        // 2. ถ้าต่อตรงไม่ได้ ให้ลองใช้ CORS Proxy
                         if (!response || !response.ok) {
                             const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(CSV_URL)}`;
                             response = await fetch(proxyUrl);
@@ -277,9 +274,8 @@
                         setIsDemoMode(false);
                     } catch (err) {
                         console.warn("Fetch failed, falling back to mock data:", err);
-                        // 3. ถ้าไม่ได้จริงๆ ใช้ข้อมูลจำลอง (Fallback to MOCK_CSV)
                         setIsDemoMode(true);
-                        setError(null); // เคลียร์ Error เพราะเราจัดการด้วยข้อมูลจำลองแล้ว
+                        setError(null);
                         processData(MOCK_CSV);
                     } finally {
                         setLoading(false);
@@ -289,7 +285,6 @@
                 fetchData();
             }, []);
 
-            // --- Logic ---
             const processedData = useMemo(() => {
                 const groupedByVehicle = {};
                 rawData.forEach(item => {
@@ -382,16 +377,23 @@
 
                 const result = Object.values(groups).map(group => {
                     const row = { name: group.name, sortKey: group.sortKey };
-                    Object.keys(group.vehicles).forEach(v => {
-                        const { distance, liters } = group.vehicles[v];
-                        row[v] = liters > 0 ? parseFloat((distance / liters).toFixed(2)) : 0;
-                    });
+                    if (selectedVehicle === 'All') {
+                        const totalDist = Object.values(group.vehicles).reduce((sum, v) => sum + v.distance, 0);
+                        const totalLit = Object.values(group.vehicles).reduce((sum, v) => sum + v.liters, 0);
+                        row['Fleet Average'] = totalLit > 0 ? parseFloat((totalDist / totalLit).toFixed(2)) : 0;
+                    } else {
+                        Object.keys(group.vehicles).forEach(v => {
+                            const { distance, liters } = group.vehicles[v];
+                            row[v] = liters > 0 ? parseFloat((distance / liters).toFixed(2)) : 0;
+                        });
+                    }
                     return row;
                 });
                 return result.sort((a, b) => a.sortKey - b.sortKey);
-            }, [filteredData]);
+            }, [filteredData, selectedVehicle]);
 
             const chartVehicleKeys = useMemo(() => {
+                if (selectedVehicle === 'All') return ['Fleet Average'];
                 const keys = new Set();
                 monthlyEfficiencyData.forEach(d => {
                     Object.keys(d).forEach(k => {
@@ -399,13 +401,14 @@
                     });
                 });
                 return Array.from(keys);
-            }, [monthlyEfficiencyData]);
+            }, [monthlyEfficiencyData, selectedVehicle]);
 
             const allVehiclesList = useMemo(() => {
                 return ['All', ...new Set(rawData.map(d => d.vehicle))];
             }, [rawData]);
 
             const getVehicleColor = (vehicleName) => {
+                if (vehicleName === 'Fleet Average') return '#3B82F6';
                 const index = allVehiclesList.indexOf(vehicleName);
                 return COLORS[index % COLORS.length] || '#000';
             };
@@ -415,8 +418,8 @@
                 const totalLiters = filteredData.reduce((acc, curr) => acc + curr.liters, 0);
                 const totalDistance = filteredData.reduce((acc, curr) => acc + curr.distance, 0);
                 const validRuns = filteredData.filter(d => d.distance > 0);
-                const validRunLiters = validRuns.reduce((acc, curr) => acc + curr.liters, 0);
                 const validDist = validRuns.reduce((acc, curr) => acc + curr.distance, 0);
+                const validRunLiters = validRuns.reduce((acc, curr) => acc + curr.liters, 0);
                 const avgKml = validRunLiters > 0 ? (validDist / validRunLiters) : 0;
                 return { totalCost, totalLiters, totalDistance, avgKml };
             }, [filteredData]);
@@ -428,7 +431,6 @@
                     if (!costMap[vName]) costMap[vName] = 0;
                     costMap[vName] += d.cost;
                 });
-                
                 let data = Object.keys(costMap)
                     .map(key => ({ name: key, value: costMap[key] }))
                     .sort((a, b) => b.value - a.value);
@@ -442,19 +444,24 @@
                 return data;
             }, [rawData]);
 
-            const rankedCostData = useMemo(() => {
-                const costMap = {};
+            // --- Updated: Combined Data for Cost vs Distance (Baht/KM analysis) ---
+            const combinedStatsData = useMemo(() => {
+                const map = {};
                 filteredData.forEach(d => {
                     const vName = d.vehicle || 'Unknown';
-                    if (!costMap[vName]) costMap[vName] = 0;
-                    costMap[vName] += d.cost;
+                    if (!map[vName]) map[vName] = { cost: 0, distance: 0 };
+                    map[vName].cost += d.cost;
+                    map[vName].distance += (d.distance || 0);
                 });
-                return Object.keys(costMap)
-                    .map(key => ({ name: key, value: costMap[key] }))
-                    .sort((a, b) => b.value - a.value);
+                return Object.keys(map).map(key => ({
+                    name: key,
+                    cost: map[key].cost,
+                    distance: map[key].distance,
+                    // Cost per Kilometer calculation
+                    bpk: map[key].distance > 0 ? (map[key].cost / map[key].distance).toFixed(2) : 0
+                })).sort((a, b) => b.cost - a.cost);
             }, [filteredData]);
 
-            // --- Render ---
             if (loading) return (
                 <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center text-slate-500">
                     <RefreshCw className="animate-spin mb-4 text-blue-500" size={40} />
@@ -494,49 +501,22 @@
                             <div className="flex items-center gap-2 border-r border-slate-200 pr-2 mr-2">
                                 <Filter size={18} className="text-slate-400" />
                             </div>
-
-                            <select 
-                                value={selectedYear}
-                                onChange={(e) => setSelectedYear(e.target.value)}
-                                className="bg-transparent outline-none text-sm font-medium text-slate-700 p-1 hover:bg-slate-50 rounded cursor-pointer"
-                            >
+                            <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="bg-transparent outline-none text-sm font-medium text-slate-700 p-1 hover:bg-slate-50 rounded cursor-pointer">
                                 <option value="All">ทุกปี (All Years)</option>
                                 {years.map(y => <option key={y} value={y}>{y + 543}</option>)}
                             </select>
-
-                            <select 
-                                value={selectedMonth}
-                                onChange={(e) => setSelectedMonth(e.target.value)}
-                                className="bg-transparent outline-none text-sm font-medium text-slate-700 p-1 hover:bg-slate-50 rounded cursor-pointer"
-                            >
+                            <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} className="bg-transparent outline-none text-sm font-medium text-slate-700 p-1 hover:bg-slate-50 rounded cursor-pointer">
                                 <option value="All">ทุกเดือน (All Months)</option>
                                 {months.map(m => <option key={m} value={m}>{MONTH_NAMES[m]}</option>)}
                             </select>
-                            
                             <div className="h-4 w-[1px] bg-slate-200 mx-1"></div>
-
-                            <select 
-                                value={selectedVehicle}
-                                onChange={(e) => setSelectedVehicle(e.target.value)}
-                                className="bg-transparent outline-none text-sm font-medium text-slate-700 min-w-[150px] p-1 hover:bg-slate-50 rounded cursor-pointer"
-                            >
+                            <select value={selectedVehicle} onChange={(e) => setSelectedVehicle(e.target.value)} className="bg-transparent outline-none text-sm font-medium text-slate-700 min-w-[150px] p-1 hover:bg-slate-50 rounded cursor-pointer">
                                 {allVehiclesList.map(v => (
                                 <option key={v} value={v}>{v === 'All' ? 'รถทุกคัน (All Vehicles)' : v}</option>
                                 ))}
                             </select>
                         </div>
                     </header>
-                    
-                    {/* Demo Mode Alert */}
-                    {isDemoMode && (
-                        <div className="mb-6 p-3 bg-orange-50 border border-orange-200 rounded-lg flex items-center gap-3 text-orange-700 text-sm">
-                            <Info size={20} className="text-orange-500 flex-shrink-0" />
-                            <div>
-                                <p className="font-semibold">กำลังใช้งานโหมด Demo</p>
-                                <p>ระบบไม่สามารถดึงข้อมูลจาก Google Sheet ได้ (อาจเกิดจากสิทธิ์การเข้าถึงหรือปัญหาเครือข่าย) จึงแสดงข้อมูลจำลองแทน</p>
-                            </div>
-                        </div>
-                    )}
 
                     {/* Stats Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -549,10 +529,17 @@
                     {/* Main Charts Area */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                         <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-                                <Gauge size={20} className="text-amber-500" />
-                                ประสิทธิภาพเฉลี่ยรายเดือน (KM/L)
-                            </h3>
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
+                                <h3 className="text-lg font-semibold flex items-center gap-2">
+                                    <Gauge size={20} className="text-amber-500" />
+                                    ประสิทธิภาพเฉลี่ยรายเดือน (KM/L)
+                                </h3>
+                                {selectedVehicle === 'All' && (
+                                    <span className="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-full">
+                                        *แสดงค่าเฉลี่ยรวมกองยาน (เลือกรายคันเพื่อดูแยก)
+                                    </span>
+                                )}
+                            </div>
                             <div className="h-[400px] w-full">
                                 <ResponsiveContainer width="100%" height="100%">
                                     {monthlyEfficiencyData.length > 0 ? (
@@ -560,20 +547,10 @@
                                             <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                                             <XAxis dataKey="name" stroke="#64748b" tick={{fontSize: 12}} />
                                             <YAxis stroke="#64748b" tick={{fontSize: 12}} domain={[0, 'auto']} />
-                                            <Tooltip 
-                                                cursor={{fill: '#f8fafc'}}
-                                                contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e2e8f0' }} 
-                                                formatter={(value, name) => [`${value} km/L`, name]}
-                                            />
+                                            <Tooltip cursor={{fill: '#f8fafc'}} contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e2e8f0' }} formatter={(value, name) => [`${value} km/L`, name]} />
                                             <Legend verticalAlign="top" height={36}/>
                                             {chartVehicleKeys.map((vehicleName) => (
-                                                <Bar 
-                                                    key={vehicleName}
-                                                    dataKey={vehicleName} 
-                                                    name={vehicleName}
-                                                    fill={getVehicleColor(vehicleName)} 
-                                                    radius={[4, 4, 0, 0]}
-                                                />
+                                                <Bar key={vehicleName} dataKey={vehicleName} name={vehicleName} fill={getVehicleColor(vehicleName)} radius={[4, 4, 0, 0]} />
                                             ))}
                                         </BarChart>
                                     ) : (
@@ -596,24 +573,11 @@
                                 <ResponsiveContainer width="100%" height="100%">
                                     {selectedVehicle === 'All' ? (
                                         <PieChart>
-                                            <Pie 
-                                                data={costByVehicleData} 
-                                                cx="50%" 
-                                                cy="45%" 
-                                                innerRadius={60} 
-                                                outerRadius={90} 
-                                                paddingAngle={2} 
-                                                dataKey="value"
-                                            >
+                                            <Pie data={costByVehicleData} cx="50%" cy="45%" innerRadius={60} outerRadius={90} paddingAngle={2} dataKey="value">
                                                 {costByVehicleData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                                             </Pie>
                                             <Tooltip formatter={(value) => `฿${value.toLocaleString()}`} />
-                                            <Legend 
-                                                layout="horizontal" 
-                                                verticalAlign="bottom" 
-                                                align="center"
-                                                wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} 
-                                            />
+                                            <Legend layout="horizontal" verticalAlign="bottom" align="center" wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} />
                                         </PieChart>
                                     ) : (
                                         <div className="flex flex-col items-center justify-center h-full text-slate-400">
@@ -626,46 +590,50 @@
                         </div>
                     </div>
 
-                    {/* Bottom Chart */}
+                    {/* Bottom Chart: Comparison (Cost vs Distance) */}
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
-                        <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-                            <ListOrdered size={20} className="text-blue-500" />
-                            อันดับค่าใช้จ่ายรวม (เรียงจากมากไปน้อย)
-                        </h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                            <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-800">
+                                <TrendingUp size={20} className="text-blue-500" />
+                                ความสัมพันธ์: ค่าใช้จ่าย vs ระยะทาง (ตรวจสอบความผิดปกติรายคัน)
+                            </h3>
+                            <div className="text-xs text-slate-400 italic">
+                                *ช่วยตรวจสอบว่ารถคันไหนใช้เงินสูงแต่ระยะทางน้อย (คุ้มค่าหรือไม่)
+                            </div>
+                        </div>
+
                         <div className="h-[400px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
-                                {rankedCostData.length > 0 ? (
-                                    <BarChart 
-                                        data={rankedCostData} 
-                                        layout="vertical"
-                                        margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
-                                    >
-                                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
-                                        <XAxis 
-                                            type="number" 
-                                            stroke="#64748b" 
-                                            tick={{fontSize: 12}} 
-                                            tickFormatter={(val) => `฿${val.toLocaleString()}`}
-                                        />
-                                        <YAxis 
-                                            dataKey="name" 
-                                            type="category" 
-                                            stroke="#64748b" 
-                                            tick={{fontSize: 12, fontWeight: 500}} 
-                                            width={180}
-                                            interval={0}
-                                        />
+                                {combinedStatsData.length > 0 ? (
+                                    <ComposedChart data={combinedStatsData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                                        <XAxis dataKey="name" stroke="#64748b" tick={{fontSize: 12, fontWeight: 500}} interval={0} height={60} angle={-15} textAnchor="end" />
+                                        
+                                        {/* Left Axis: Cost (Baht) */}
+                                        <YAxis yAxisId="left" stroke="#3B82F6" orientation="left" tick={{fontSize: 12}} />
+                                        
+                                        {/* Right Axis: Distance (KM) */}
+                                        <YAxis yAxisId="right" stroke="#F97316" orientation="right" tick={{fontSize: 12}} />
+                                        
                                         <Tooltip 
-                                            cursor={{fill: '#f1f5f9'}}
-                                            contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e2e8f0' }} 
-                                            formatter={(value) => [`฿${value.toLocaleString()}`, 'Total Cost']}
+                                            contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                                            formatter={(value, name) => {
+                                                if (name === 'ค่าใช้จ่าย') return [`฿${value.toLocaleString()}`, name];
+                                                if (name === 'ระยะทาง') return [`${value.toLocaleString()} กม.`, name];
+                                                return [value, name];
+                                            }}
+                                            labelFormatter={(name, payload) => {
+                                                if (payload && payload.length > 0) {
+                                                    const bpk = payload[0].payload.bpk;
+                                                    return `${name} (ค่าใช้จ่ายเฉลี่ย ฿${bpk}/กม.)`;
+                                                }
+                                                return name;
+                                            }}
                                         />
-                                        <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={30}>
-                                            {rankedCostData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={getVehicleColor(entry.name)} />
-                                            ))}
-                                        </Bar>
-                                    </BarChart>
+                                        <Legend />
+                                        <Bar yAxisId="left" dataKey="cost" name="ค่าใช้จ่าย" fill="#3B82F6" barSize={35} radius={[4, 4, 0, 0]} />
+                                        <Line yAxisId="right" type="monotone" dataKey="distance" name="ระยะทาง" stroke="#F97316" strokeWidth={4} dot={{r: 5, fill: '#F97316'}} activeDot={{r: 8}} />
+                                    </ComposedChart>
                                 ) : (
                                     <div className="flex flex-col items-center justify-center h-full text-slate-400">
                                         <p>ไม่พบข้อมูล</p>
@@ -677,21 +645,13 @@
 
                     {/* Data Table */}
                     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
-                        <div 
-                            className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition-colors"
-                            onClick={() => setIsTableExpanded(!isTableExpanded)}
-                        >
+                        <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => setIsTableExpanded(!isTableExpanded)}>
                             <h3 className="font-semibold text-slate-700 flex items-center gap-2">
                                 ข้อมูลดิบ (Data Logs)
-                                <span className="text-xs font-normal text-slate-400 bg-white px-2 py-0.5 rounded-full border border-slate-200">
-                                    {filteredData.length} รายการ
-                                </span>
+                                <span className="text-xs font-normal text-slate-400 bg-white px-2 py-0.5 rounded-full border border-slate-200">{filteredData.length} รายการ</span>
                             </h3>
-                            <button className="text-slate-500">
-                                {isTableExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                            </button>
+                            <button className="text-slate-500">{isTableExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</button>
                         </div>
-
                         {isTableExpanded && (
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm text-left text-slate-600">
@@ -719,9 +679,7 @@
                                                 <td className="px-6 py-4 text-right font-bold text-slate-800">{row.cost.toLocaleString()}</td>
                                                 <td className="px-6 py-4 text-right">
                                                     {row.distance > 0 && row.kml > 0 ? (
-                                                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.kml > 15 ? 'bg-green-100 text-green-800' : row.kml > 10 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>
-                                                            {row.kml}
-                                                        </span>
+                                                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.kml > 15 ? 'bg-green-100 text-green-800' : row.kml > 10 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>{row.kml}</span>
                                                     ) : '-'}
                                                 </td>
                                             </tr>
@@ -734,48 +692,33 @@
 
                     {/* Debug Footer */}
                     <div className="mt-8 border-t border-slate-200 pt-4">
-                        <button 
-                            onClick={() => setShowDebug(!showDebug)}
-                            className="flex items-center gap-2 text-xs text-slate-400 hover:text-slate-600 transition-colors"
-                        >
+                        <button onClick={() => setShowDebug(!showDebug)} className="flex items-center gap-2 text-xs text-slate-400 hover:text-slate-600 transition-colors">
                             <Settings size={14} />
                             {showDebug ? "ซ่อนข้อมูล Debug (Hide Debug)" : "มีปัญหาข้อมูล? คลิกเพื่อดูการเชื่อมต่อ (Debug Mapping)"}
                         </button>
-                        
                         {showDebug && mappingDebug && (
                             <div className="mt-4 p-4 bg-slate-800 text-slate-200 rounded-lg text-xs font-mono overflow-x-auto">
-                                <h4 className="font-bold mb-2 text-white flex items-center gap-2">
-                                    <CheckCircle2 size={14} className="text-green-400"/> CSV Column Mapping Status
-                                </h4>
+                                <h4 className="font-bold mb-2 text-white flex items-center gap-2"><CheckCircle2 size={14} className="text-green-400"/> CSV Column Mapping Status</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <p className="text-slate-400 mb-1">Found Headers in CSV:</p>
-                                        <div className="flex flex-wrap gap-2">
-                                            {mappingDebug.headers.map((h, i) => (
-                                                <span key={i} className="px-2 py-1 bg-slate-700 rounded border border-slate-600">
-                                                    [{i}] {h}
-                                                </span>
-                                            ))}
-                                        </div>
+                                        <div className="flex flex-wrap gap-2">{mappingDebug.headers.map((h, i) => (
+                                            <span key={i} className="px-2 py-1 bg-slate-700 rounded border border-slate-600">[{i}] {h}</span>
+                                        ))}</div>
                                     </div>
                                     <div>
                                         <p className="text-slate-400 mb-1">Active Mapping:</p>
-                                        <ul className="space-y-1">
-                                            {Object.entries(mappingDebug.mapping).map(([key, val]) => (
-                                                <li key={key} className="flex justify-between border-b border-slate-700 pb-1">
-                                                    <span className="text-blue-300 capitalize">{key}</span>
-                                                    <span>
-                                                        Col <span className="text-yellow-400 font-bold">{val.index}</span>: {val.name}
-                                                    </span>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        <ul className="space-y-1">{Object.entries(mappingDebug.mapping).map(([key, val]) => (
+                                            <li key={key} className="flex justify-between border-b border-slate-700 pb-1">
+                                                <span className="text-blue-300 capitalize">{key}</span>
+                                                <span>Col <span className="text-yellow-400 font-bold">{val.index}</span>: {val.name}</span>
+                                            </li>
+                                        ))}</ul>
                                     </div>
                                 </div>
                             </div>
                         )}
                     </div>
-
                 </div>
             );
         }
